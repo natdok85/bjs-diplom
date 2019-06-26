@@ -1,21 +1,25 @@
 // import { callbackify } from "util";
 
+// 'use strict';
+
 class Profile {
-    constructor({username, name, password}) {
+    constructor({username, name: {firstName, lastName}, password}) {
         this.username = username;
         this.name = name;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     };
 
-    createUser({username, name: {firstName, lastName}, password}, callback) {
-        return ApiConnector.createUser({username, name: {firstName, lastName}, password}, (err, data) => {
+    createUser(callback) {
+        return ApiConnector.createUser((err, data) => {
             console.log(`Creating user ${this.username} real name ${this.name} password ${this.password}`);
             callback (err, data);
         });
     };
 
-    performLogin({username, password}, callback) {
-        return ApiConnector.performLogin({username, password}, (err, data) => {
+    performLogin(callback) {
+        return ApiConnector.performLogin((err, data) => {
             console.log(`Login user ${this.username} password ${this.password}`);
             callback (err, data);     
         });
@@ -43,8 +47,36 @@ class Profile {
     };
     };
 
- let currencyRates = ApiConnector.getStocks();
- console.log(currencyRates);
+    // function getStocks() {
+    //     как вызвать метод getStocks без экземпляра класса ApiConnector???;       
+    // };
+
+//  getStocks();
+
+ function main() {
+     const Vasya = new Profile({
+         username:'user1',
+         name: {firstName:'Vasya', lastName: 'Pupkin'},
+         password: '123'});
+     const Petya = new Profile({
+         username: 'user2', 
+         name: {firstName: 'Petya', lastName: 'Ivanov'},
+         password: 'qwerty'});
+     
+     Vasya.createUser();
+     Vasya.performLogin();
+     Vasya.addMoney({currency: 'RUB', amount: 200}, (err, data) => {
+         if (err) {
+             console.error('Error during adding money to Vasya');             
+         } else {
+             console.log(`Added 500000 euro to Vasya`);             
+         }
+     });
+
+ }
+
+ main();
+
 
 
         
