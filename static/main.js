@@ -12,15 +12,18 @@ class Profile {
     };
 
     createUser(callback) {
-        return ApiConnector.createUser((err, data) => {
-            console.log(`Creating user ${this.username} real name ${this.name} password ${this.password}`);
-            callback (err, data);
+        return ApiConnector.createUser({username: this.username, name: this.name, password: this.password}, (err, data) => {
+            console.log(`Creating user ${this.username}`);
+            callback(err, data);
         });
     };
 
     performLogin(callback) {
-        return ApiConnector.performLogin((err, data) => {
-            console.log(`Login user ${this.username} password ${this.password}`);
+        return ApiConnector.performLogin({
+            username: this.username,
+            password: this.password},
+             (err, data) => {
+            console.log(`Authorizing user ${this.username}`);
             callback (err, data);     
         });
         };
@@ -47,33 +50,44 @@ class Profile {
     };
     };
 
-    // function getStocks() {
-    //     как вызвать метод getStocks без экземпляра класса ApiConnector???;       
-    // };
-
-//  getStocks();
-
+    function getStocks(callback) {
+       return ApiConnector.getStocks((err, data) => {
+           console.log(`Getting stocks info`);
+           callback(err, data[99]);
+       });      
+    };
+ getStocks();
+ 
  function main() {
-     const Vasya = new Profile({
-         username:'user1',
-         name: {firstName:'Vasya', lastName: 'Pupkin'},
-         password: '123'});
+     const Ivan = new Profile({
+         username:'ivan',
+         name: {firstName:'Ivan', lastName: 'Chernyshev'},
+         password: 'ivanspass'});
      const Petya = new Profile({
-         username: 'user2', 
+         username: 'petya', 
          name: {firstName: 'Petya', lastName: 'Ivanov'},
          password: 'qwerty'});
      
-     Vasya.createUser();
-     Vasya.performLogin();
-     Vasya.addMoney({currency: 'RUB', amount: 200}, (err, data) => {
-         if (err) {
-             console.error('Error during adding money to Vasya');             
-         } else {
-             console.log(`Added 500000 euro to Vasya`);             
-         }
-     });
+     Ivan.createUser();
+     if (Ivan.createUser()) {
+         console.log(`User ${this.username} is created!`);
+         Ivan.performLogin();
+     } else {
+         console.log(`error`);
+     };
 
- }
+     if (!Ivan.performLogin()) {
+         console.log(`error`);
+     } else {
+         Ivan.addMoney({ currency: 'RUB', amount: 100 }, (err, data) => {
+            if (err) {
+                    console.error('Error during adding money to Ivan');
+            } else {
+                    console.log('Added 500000 euros to Ivan');
+        };
+        });    
+ };
+};
 
  main();
 
