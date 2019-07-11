@@ -1,14 +1,12 @@
 // import { callbackify } from "util";
 
-// 'use strict';
+'use strict';
 
 class Profile {
     constructor({username, name: {firstName, lastName}, password}) {
         this.username = username;
-        this.name = name;
+        this.name = {firstName, lastName};
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
     };
 
     createUser(callback) {
@@ -19,10 +17,7 @@ class Profile {
     };
 
     performLogin(callback) {
-        return ApiConnector.performLogin({
-            username: this.username,
-            password: this.password},
-             (err, data) => {
+        return ApiConnector.performLogin({username: this.username, password: this.password}, (err, data) => {
             console.log(`Authorizing user ${this.username}`);
             callback (err, data);     
         });
@@ -56,9 +51,16 @@ class Profile {
            callback(err, data[99]);
        });      
     };
- getStocks();
- 
- function main() {
+ let stocks = getStocks((err, data) => {
+     if(err) {
+         console.error('Error during getting stocks');
+         throw err;
+     } else {
+         return data;
+     };
+     });
+
+  function main() {
      const Ivan = new Profile({
          username:'ivan',
          name: {firstName:'Ivan', lastName: 'Chernyshev'},
@@ -68,35 +70,35 @@ class Profile {
          name: {firstName: 'Petya', lastName: 'Ivanov'},
          password: 'qwerty'});
      
-     Ivan.createUser();
-     if (Ivan.createUser()) {
-         console.log(`User ${this.username} is created!`);
-         Ivan.performLogin();
-     } else {
-         console.log(`error`);
-     };
+     Ivan.createUser((err, data) => {
+         if (err) {
+             console.error('Error during creating Ivan');
+             throw err;
+         } else {
+             console.log('Ivan is created!');
 
-     if (!Ivan.performLogin()) {
-         console.log(`error`);
-     } else {
-         Ivan.addMoney({ currency: 'RUB', amount: 100 }, (err, data) => {
-            if (err) {
-                    console.error('Error during adding money to Ivan');
-            } else {
-                    console.log('Added 500000 euros to Ivan');
-        };
-        });    
- };
-};
+             Ivan.performLogin((err, data) => {
+                 if(err) {
+                     console.error('Error during authorizing Ivan');
+                     throw err;
+                 } else {
+                     console.log('Ivan is authorized!');
+
+                     Ivan.addMoney({currency: 'RUB', amount: 100}, (err, data) => {
+                         if (err) {
+                             console.error('Error during adding money to Ivan');
+                         } else {
+                             console.log(`Added 500000 euros to Ivan`);
+
+                             //пункт 7 конвертация денег
+                         };
+                     });
+                    };
+                });
+            };
+        });
+    };
+                 
+     
 
  main();
-
-
-
-        
-
-      
-    
-
-
-
