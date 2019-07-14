@@ -69,7 +69,7 @@ function main() {
             console.error(`Error during getting stocks`);
             throw err;
         }
-        let currentRate = data;
+        let currentRate = data;        
 
         Ivan.createUser((err, data) => {
             if (err) {
@@ -91,14 +91,18 @@ function main() {
                             } else {
                                 console.log(`Added 500000 euros to Ivan`);
 
-                                //пункт 7 конвертация денег
+                                Ivan.convertMoney({fromCurrency:})
+
+                                
                             }
                         });
                     }
                 });
             }
         });
-
     });
-}
+};
+
+    
+
 main();
