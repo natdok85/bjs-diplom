@@ -69,7 +69,8 @@ function main() {
             console.error(`Error during getting stocks`);
             throw err;
         }
-        let currentRate = data;        
+        let currentRate = data;     
+        
 
         Ivan.createUser((err, data) => {
             if (err) {
@@ -85,13 +86,39 @@ function main() {
                     } else {
                         console.log('Ivan is authorized!');
 
-                        Ivan.addMoney({currency: 'RUB', amount: 100}, (err, data) => {
+                        Ivan.addMoney({currency: 'EUR', amount: 500000}, (err, data) => {
                             if (err) {
                                 console.error('Error during adding money to Ivan');
                             } else {
                                 console.log(`Added 500000 euros to Ivan`);
 
-                                Ivan.convertMoney({fromCurrency:})
+                                let currentAmount = currentRate.EUR_NETCOIN * 500000;                           
+                                
+
+                                Ivan.convertMoney({fromCurrency: 'EUR', targetCurrency: 'NETCOIN', targetAmount: currentAmount}, (err, data) =>{
+                                    if (err) {
+                                        console.error('Error during converting money');
+                                    } else {
+                                        console.log(`Converted to coins`);
+
+                                        Petya.createUser((err, data) => {
+                                            if(err) {
+                                                console.error('Error during creating Petya');
+                                                throw err;
+                                            } else {
+                                                console.log('Petya is created!');
+
+                                                Ivan.transferMoney({to: 'petya', amount: currentAmount}, (err, data) => {
+                                                    if(err) {
+                                                        console.error('Error during transferring money');
+                                                    } else {
+                                                        console.log(`Petya has got ${currentAmount} coins`);
+                                                    } 
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
 
                                 
                             }
