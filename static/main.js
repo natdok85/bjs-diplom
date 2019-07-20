@@ -34,7 +34,7 @@ class Profile {
 
     convertMoney({fromCurrency, targetCurrency, targetAmount}, callback) {
         return ApiConnector.convertMoney({fromCurrency, targetCurrency, targetAmount}, (err, data) => {
-            console.log(`Converting ${fromCurrency} to ${targetCurrency}`);
+            console.log(`Converting ${fromCurrency} to ${targetAmount} ${targetCurrency}`);
             callback(err, data);
         });
     };
@@ -112,7 +112,7 @@ function main() {
                                                     if(err) {
                                                         console.error('Error during transferring money');
                                                     } else {
-                                                        console.log(`Petya has got ${currentAmount} coins`);
+                                                        console.log(`Petya has got ${currentAmount} NETCOINS`);
                                                     } 
                                                 })
                                             }
